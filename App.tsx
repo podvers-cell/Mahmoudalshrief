@@ -1615,14 +1615,31 @@ Budget: ${formData.details.budget || 'Not specified'}
 This booking was submitted through your website.
     `.trim();
     
-    // Send email to podverse.uae@gmail.com using mailto
-    // Note: For production, consider using EmailJS, FormSpree, or a backend API
-    const mailtoLink = `mailto:podverse.uae@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}&cc=${encodeURIComponent(formData.details.email)}`;
+    const res = await fetch("/api/send-mail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        service: formData.serviceType,
+        date: formData.date,
+        time: formData.time,
+        name: formData.details.name,
+        email: formData.details.email,
+        phone: formData.details.phone,
+        company: formData.details.company,
+        brief: formData.details.brief,
+        budget: formData.details.budget,
+      }),
+    });
     
-    // Open email client with pre-filled details
-    window.location.href = mailtoLink;
+    const data = await res.json();
+    
+    if (!data.success) {
+      alert("حصل خطأ أثناء إرسال الطلب ❌");
+      return;
+    }
     
     setSubmitted(true);
+    
   };
 
   if (submitted) {
