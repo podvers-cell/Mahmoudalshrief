@@ -406,7 +406,7 @@ const HomePage = () => {
               <span className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'} text-xs font-medium uppercase tracking-widest`}>Based in Dubai</span>
             </motion.div>
             
-            <h1 className={`text-6xl sm:text-6xl md:text-8xl lg:text-9xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} leading-[0.9] mb-6 sm:mb-8 tracking-tight px-2`}>
+            <h1 className={`text-7xl sm:text-6xl md:text-8xl lg:text-9xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} leading-[0.9] mb-6 sm:mb-8 tracking-tight px-2`}>
               Cinematic <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-200 via-white to-slate-400 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
                 Visuals
