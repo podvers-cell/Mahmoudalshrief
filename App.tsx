@@ -139,6 +139,7 @@ const Logo = () => (
 
 const Header = ({ theme, toggleTheme }: { theme: 'dark' | 'light'; toggleTheme: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -147,42 +148,148 @@ const Header = ({ theme, toggleTheme }: { theme: 'dark' | 'light'; toggleTheme: 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled 
-          ? theme === 'dark' 
-            ? 'bg-[#050508]/80 backdrop-blur-lg border-b border-white/5 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
-            : 'bg-white/90 backdrop-blur-lg border-b border-gray-200 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)]'
-          : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
-        <Logo />
-        
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map(link => (
-            <Link 
-              key={link.path} 
-              to={link.path}
-              className={`text-sm font-medium transition-all hover:text-brand-pink relative group ${
-                location.pathname === link.path 
-                  ? theme === 'dark' ? 'text-white' : 'text-slate-900'
-                  : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
-              }`}
-            >
-              {link.name}
-              <span className={`absolute -bottom-1 left-0 h-[1px] bg-brand-pink transition-all duration-300 ${location.pathname === link.path ? 'w-full shadow-[0_0_8px_#ffffff]' : 'w-0 group-hover:w-full'}`} />
-            </Link>
-          ))}
-          <Button variant="glow" to="/book" className="!py-2 !px-6 text-sm">
-            Book Now
-          </Button>
-        </nav>
-      </div>
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
-    </header>
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  return (
+    <>
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled 
+            ? theme === 'dark' 
+              ? 'bg-[#050508]/80 backdrop-blur-lg border-b border-white/5 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
+              : 'bg-white/90 backdrop-blur-lg border-b border-gray-200 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)]'
+            : 'bg-transparent py-4 md:py-6'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
+          <Logo />
+          
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map(link => (
+              <Link 
+                key={link.path} 
+                to={link.path}
+                className={`text-sm font-medium transition-all hover:text-brand-pink relative group ${
+                  location.pathname === link.path 
+                    ? theme === 'dark' ? 'text-white' : 'text-slate-900'
+                    : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                }`}
+              >
+                {link.name}
+                <span className={`absolute -bottom-1 left-0 h-[1px] bg-brand-pink transition-all duration-300 ${location.pathname === link.path ? 'w-full shadow-[0_0_8px_#ffffff]' : 'w-0 group-hover:w-full'}`} />
+              </Link>
+            ))}
+            <Button variant="glow" to="/book" className="!py-2 !px-6 text-sm">
+              Book Now
+            </Button>
+          </nav>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className={`md:hidden w-10 h-10 flex items-center justify-center rounded-lg transition-all ${
+              theme === 'dark' 
+                ? 'text-white hover:bg-white/10' 
+                : 'text-slate-900 hover:bg-gray-200'
+            }`}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] md:hidden"
+            />
+            
+            {/* Mobile Menu */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] ${theme === 'dark' ? 'bg-[#050508]' : 'bg-white'} border-l ${theme === 'dark' ? 'border-white/10' : 'border-gray-300'} z-[70] md:hidden overflow-y-auto shadow-2xl`}
+            >
+              <div className="p-6 flex flex-col h-full">
+                {/* Menu Header */}
+                <div className="flex items-center justify-between mb-8">
+                  <Logo />
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-lg transition-all ${
+                      theme === 'dark' 
+                        ? 'text-white hover:bg-white/10' 
+                        : 'text-slate-900 hover:bg-gray-200'
+                    }`}
+                    aria-label="Close menu"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+
+                {/* Navigation Links */}
+                <nav className="flex-1 flex flex-col gap-1 mb-6">
+                  {NAV_LINKS.map((link, index) => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`px-4 py-3 rounded-lg text-base font-medium transition-all ${
+                        location.pathname === link.path
+                          ? theme === 'dark'
+                            ? 'bg-brand-pink text-black'
+                            : 'bg-brand-pink text-black'
+                          : theme === 'dark'
+                            ? 'text-slate-300 hover:bg-white/10 hover:text-white'
+                            : 'text-slate-700 hover:bg-gray-200 hover:text-slate-900'
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </nav>
+
+                {/* Book Now Button */}
+                <Button 
+                  variant="glow" 
+                  to="/book" 
+                  className="w-full !py-3 text-base"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Book Now
+                </Button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
@@ -540,12 +647,12 @@ const WorkPage = () => {
         </Reveal>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-3 mb-16">
+        <div className="flex flex-wrap gap-2 sm:gap-3 mb-12 sm:mb-16 px-2 sm:px-0">
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+              className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 border ${
                 filter === cat 
                   ? 'bg-brand-pink text-black border-brand-pink shadow-[0_0_15px_rgba(255,255,255,0.4)]' 
                   : theme === 'dark'
@@ -1611,8 +1718,8 @@ This booking was submitted through your website.
                           : 'bg-gray-50 text-slate-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400'
                     }`}
                   >
-                    <span className="font-semibold text-lg">{pkg.name}</span>
-                    <span className="text-sm opacity-70 bg-white/10 px-3 py-1 rounded-full">{pkg.price}</span>
+                    <span className="font-semibold text-base sm:text-lg">{pkg.name}</span>
+                    <span className="text-xs sm:text-sm opacity-70 bg-white/10 px-2 sm:px-3 py-1 rounded-full whitespace-nowrap">{pkg.price}</span>
                   </button>
                 ))}
               </div>
@@ -1632,13 +1739,13 @@ This booking was submitted through your website.
                 <label className={`block ${theme === 'dark' ? 'text-white/80' : 'text-slate-700/80'} text-sm mb-4 font-medium`}>
                   Select Date & Time
                 </label>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Date Input */}
                   <input
                     type="text"
                     readOnly
                     onClick={() => setShowDatePicker(true)}
-                    className={`w-full ${theme === 'dark' ? 'bg-white/10 text-white border-white/20 focus:ring-white/40' : 'bg-white/80 text-slate-900 border-gray-300/50 focus:ring-gray-400/40'} border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 backdrop-blur-md transition-all cursor-pointer`}
+                    className={`w-full ${theme === 'dark' ? 'bg-white/10 text-white border-white/20 focus:ring-white/40' : 'bg-white/80 text-slate-900 border-gray-300/50 focus:ring-gray-400/40'} border rounded-xl px-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 backdrop-blur-md transition-all cursor-pointer`}
                     placeholder="Select Date"
                     value={dateDisplay || (formData.date ? formData.date.split('-').reverse().join('/') : '')}
                   />
@@ -1648,7 +1755,7 @@ This booking was submitted through your website.
                     type="text"
                     readOnly
                     onClick={() => setShowTimePicker(true)}
-                    className={`w-full ${theme === 'dark' ? 'bg-white/10 text-white border-white/20 focus:ring-white/40' : 'bg-white/80 text-slate-900 border-gray-300/50 focus:ring-gray-400/40'} border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 backdrop-blur-md transition-all cursor-pointer`}
+                    className={`w-full ${theme === 'dark' ? 'bg-white/10 text-white border-white/20 focus:ring-white/40' : 'bg-white/80 text-slate-900 border-gray-300/50 focus:ring-gray-400/40'} border rounded-xl px-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 backdrop-blur-md transition-all cursor-pointer`}
                     placeholder="Select Time"
                     value={timeDisplay || formData.time || ''}
                   />
@@ -1951,11 +2058,11 @@ const App = () => {
           href="https://wa.me/971548886318"
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
           aria-label="Contact via WhatsApp"
         >
-          <MessageSquare size={28} className="text-white" />
-          <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full animate-pulse"></span>
+          <MessageSquare size={24} className="sm:w-7 sm:h-7 text-white" />
+          <span className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full animate-pulse"></span>
         </a>
       </div>
       </Router>
