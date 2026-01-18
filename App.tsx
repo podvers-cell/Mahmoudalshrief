@@ -1590,56 +1590,40 @@ const BookPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Format email content
-    const emailSubject = `New Booking Request - ${formData.serviceType}`;
-    const emailBody = `
-New Booking Request Received
-
-Service Type: ${formData.serviceType}
-Package: ${formData.packageId === 'custom' ? 'Custom / Not sure' : formData.packageId}
-Preferred Date: ${formData.date || 'Not selected'}
-Preferred Time: ${formData.time || 'Not selected'}
-
-Client Details:
-- Name: ${formData.details.name}
-- Email: ${formData.details.email}
-- Phone: ${formData.details.phone || 'Not provided'}
-- Company: ${formData.details.company || 'Not provided'}
-
-Project Brief:
-${formData.details.brief}
-
-Budget: ${formData.details.budget || 'Not specified'}
-
----
-This booking was submitted through your website.
-    `.trim();
-    
-    const res = await fetch("/api/send-mail", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        service: formData.serviceType,
-        date: formData.date,
-        time: formData.time,
-        name: formData.details.name,
-        email: formData.details.email,
-        phone: formData.details.phone,
-        company: formData.details.company,
-        brief: formData.details.brief,
-        budget: formData.details.budget,
-      }),
-    });
-    
-    const data = await res.json();
-    
-    if (!data.success) {
+    try {
+      const apiUrl = import.meta.env.DEV 
+        ? 'http://localhost:3001/api/send-mail' 
+        : '/api/send-mail';
+      
+      const res = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service: formData.serviceType,
+          package: formData.packageId,
+          date: formData.date,
+          time: formData.time,
+          name: formData.details.name,
+          email: formData.details.email,
+          phone: formData.details.phone,
+          company: formData.details.company,
+          brief: formData.details.brief,
+          budget: formData.details.budget,
+        }),
+      });
+      
+      const data = await res.json();
+      
+      if (!data.success) {
+        alert("حصل خطأ أثناء إرسال الطلب ❌");
+        return;
+      }
+      
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Email sending error:', error);
       alert("حصل خطأ أثناء إرسال الطلب ❌");
-      return;
     }
-    
-    setSubmitted(true);
-    
   };
 
   if (submitted) {
@@ -1865,7 +1849,8 @@ This booking was submitted through your website.
               
               <div className="mt-10 flex justify-between items-center">
                 <button type="button" onClick={handleBack} className="text-slate-400 hover:text-white transition-colors">Back</button>
-                <Button variant="glow" className="shadow-[0_0_30px_rgba(255,255,255,0.4)]">Submit Request</Button>
+                <Button type="submit" variant="glow" className="shadow-[0_0_30px_rgba(255,255,255,0.4)]"> Submit Request
+</Button>
               </div>
             </form>
           )}
