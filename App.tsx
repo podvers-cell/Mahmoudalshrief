@@ -434,10 +434,10 @@ const HomePage = () => {
       {/* Showreel Placeholder */}
       <Section className="!py-0 relative z-20 -mt-20">
         <Reveal>
-          <div className={`relative aspect-video rounded-2xl overflow-hidden border ${theme === 'dark' ? 'border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-surface' : 'border-gray-300 shadow-[0_0_30px_rgba(0,0,0,0.1)] bg-white'} group`}>
+          <div className={`relative aspect-video rounded-2xl overflow-hidden ${theme === 'dark' ? 'shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-surface' : 'shadow-[0_0_30px_rgba(0,0,0,0.1)] bg-white'} group`}>
              <iframe
                id="youtube-video-player"
-               src="https://www.youtube.com/embed/gILiG8PZFXg?autoplay=1&mute=1&loop=1&playlist=gILiG8PZFXg&controls=0&modestbranding=1&rel=0&disablekb=1&fs=0&playsinline=1&showinfo=0&iv_load_policy=3&cc_load_policy=0&origin=https://www.youtube.com"
+               src="https://www.youtube.com/embed/gILiG8PZFXg?autoplay=1&mute=1&loop=1&playlist=gILiG8PZFXg&controls=0&modestbranding=1&rel=0&disablekb=1&fs=0&playsinline=1&showinfo=0&iv_load_policy=3&cc_load_policy=0&origin=https://www.youtube.com&vq=hd1080"
                className="absolute inset-0 w-full h-full pointer-events-none"
                allow="autoplay; encrypted-media"
                allowFullScreen={false}
@@ -445,6 +445,37 @@ const HomePage = () => {
                frameBorder="0"
                referrerPolicy="strict-origin-when-cross-origin"
              />
+             
+             {/* Fade overlays to blend video with background from all edges */}
+             {/* Top fade */}
+             <div 
+               className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-30"
+               style={{
+                 background: `linear-gradient(to bottom, ${theme === 'dark' ? 'rgba(5, 5, 8, 1)' : 'rgba(249, 250, 251, 1)'} 0%, ${theme === 'dark' ? 'rgba(5, 5, 8, 0.8)' : 'rgba(249, 250, 251, 0.8)'} 30%, transparent 100%)`
+               }}
+             />
+             {/* Bottom fade */}
+             <div 
+               className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-30"
+               style={{
+                 background: `linear-gradient(to top, ${theme === 'dark' ? 'rgba(5, 5, 8, 1)' : 'rgba(249, 250, 251, 1)'} 0%, ${theme === 'dark' ? 'rgba(5, 5, 8, 0.8)' : 'rgba(249, 250, 251, 0.8)'} 30%, transparent 100%)`
+               }}
+             />
+             {/* Left fade */}
+             <div 
+               className="absolute top-0 bottom-0 left-0 w-32 pointer-events-none z-30"
+               style={{
+                 background: `linear-gradient(to right, ${theme === 'dark' ? 'rgba(5, 5, 8, 1)' : 'rgba(249, 250, 251, 1)'} 0%, ${theme === 'dark' ? 'rgba(5, 5, 8, 0.8)' : 'rgba(249, 250, 251, 0.8)'} 30%, transparent 100%)`
+               }}
+             />
+             {/* Right fade */}
+             <div 
+               className="absolute top-0 bottom-0 right-0 w-32 pointer-events-none z-30"
+               style={{
+                 background: `linear-gradient(to left, ${theme === 'dark' ? 'rgba(5, 5, 8, 1)' : 'rgba(249, 250, 251, 1)'} 0%, ${theme === 'dark' ? 'rgba(5, 5, 8, 0.8)' : 'rgba(249, 250, 251, 0.8)'} 30%, transparent 100%)`
+               }}
+             />
+             
              {/* Overlay to block all interactions - always active to prevent YouTube controls and branding */}
              <div 
                className="absolute inset-0 bg-transparent pointer-events-auto z-50 cursor-default" 
