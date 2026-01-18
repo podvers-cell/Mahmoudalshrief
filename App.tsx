@@ -130,7 +130,7 @@ const Logo = () => (
     <img 
       src={logoImage} 
       alt="Mahmoud Alshrief Logo" 
-      className="h-8 md:h-10 w-auto object-contain"
+      className="h-12 md:h-[60px] w-auto object-contain"
     />
   </Link>
 );
