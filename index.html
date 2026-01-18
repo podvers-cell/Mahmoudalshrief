@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mahmoud Alshrief | Videographer & Director</title>
+    <meta
+      name="description"
+      content="Cinematic visuals that sell, connect, and elevate brands. Dubai-based Videographer, Editor, and Director."
+    />
+
+    <!-- Tailwind CSS (مؤقتًا) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: "#050508",
+              surface: "#0f1016",
+              primary: "#6d28d9",
+              secondary: "#0ea5e9",
+              accent: "#d8b4fe",
+              brand: {
+                pink: "#ffffff",
+                glow: "#ffffff",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              signature: ['"Mr De Haviland"', "cursive"],
+            },
+            animation: {
+              blob: "blob 10s infinite",
+              "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+            },
+            keyframes: {
+              blob: {
+                "0%": { transform: "translate(0px, 0px) scale(1)" },
+                "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                "100%": { transform: "translate(0px, 0px) scale(1)" },
+              },
+              "pulse-glow": {
+                "0%, 100%": {
+                  opacity: 1,
+                  boxShadow: "0 0 20px rgba(255, 255, 255, 0.5)",
+                },
+                "50%": {
+                  opacity: 0.8,
+                  boxShadow: "0 0 10px rgba(255, 255, 255, 0.2)",
+                },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Mr+De+Haviland&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <style>
+      body {
+        background-color: #050508;
+        color: #f8fafc;
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #050508;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #ffffff;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .glass-card {
+        background: linear-gradient(
+          145deg,
+          rgba(25, 20, 30, 0.4) 0%,
+          rgba(10, 10, 15, 0.4) 100%
+        );
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+      }
+      .glass-card:hover {
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2),
+          inset 0 0 20px rgba(255, 255, 255, 0.05);
+        transform: translateY(-5px);
+      }
+      .text-glow {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.6),
+          0 0 20px rgba(255, 255, 255, 0.4);
+      }
+      .text-glow-sm {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+      }
+      .cursor-dot,
+      .cursor-outline {
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        z-index: 9999;
+        pointer-events: none;
+      }
+      .cursor-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #ffffff;
+      }
+      .cursor-outline {
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: width 0.2s, height 0.2s, background-color 0.2s;
+      }
+      body:hover .cursor-outline {
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      }
+      @media (max-width: 768px) {
+        .cursor-dot,
+        .cursor-outline {
+          display: none;
+        }
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <!-- ✅ لازم ده عشان React يشتغل -->
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
