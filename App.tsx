@@ -205,13 +205,13 @@ const Footer = ({ theme }: { theme: 'dark' | 'light' }) => (
               { Icon: Instagram, href: 'https://www.instagram.com/melgml10?igsh=MW4yc21uM2Q4N2lweQ%3D%3D&utm_source=qr' },
               { Icon: Youtube, href: 'https://www.youtube.com/channel/UCBcUcxcH8-jzCdBCVjppDpA' },
               { Icon: Linkedin, href: 'https://www.linkedin.com/in/melgml10/' },
-              { Icon: Film, href: '#' }
+              { Icon: MessageSquare, href: 'https://wa.me/971548886318' }
             ].map(({ Icon, href }, i) => (
               <a 
                 key={i} 
                 href={href} 
-                target={href !== '#' ? '_blank' : undefined}
-                rel={href !== '#' ? 'noopener noreferrer' : undefined}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`w-12 h-12 rounded-full ${theme === 'dark' ? 'glass' : 'bg-gray-200 border border-gray-300'} flex items-center justify-center ${theme === 'dark' ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-slate-900'} hover:bg-brand-pink/20 hover:border-brand-pink/40 ${theme === 'dark' ? 'hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]' : ''} transition-all duration-300`}
               >
                 <Icon size={20} />
@@ -1505,7 +1505,7 @@ This booking was submitted through your website.
            <div className="flex flex-col gap-4 max-w-xs mx-auto">
               <Button to="/" variant="outline">Back to Home</Button>
               <a 
-                href={`https://wa.me/971500000000?text=Hi Mahmoud, I just submitted a booking request for ${formData.serviceType}. My name is ${formData.details.name}.`}
+                href={`https://wa.me/971548886318?text=Hi Mahmoud, I just submitted a booking request for ${formData.serviceType}. My name is ${formData.details.name}.`}
                 target="_blank"
                 rel="noreferrer"
                 className="text-green-400 hover:text-green-300 text-sm flex items-center justify-center gap-2 mt-4 hover:underline"
@@ -1813,7 +1813,11 @@ const ContactPage = () => {
                    <h3 className="text-3xl font-bold text-white mb-8">Contact Info</h3>
                    <div className="space-y-6 text-slate-300 text-lg">
                      <p className="flex items-center gap-4"><span className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-brand-pink">E</span> hello@mahmoudalshrief.com</p>
-                     <p className="flex items-center gap-4"><span className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-brand-pink">P</span> +971 50 000 0000</p>
+                     <p className="flex items-center gap-4"><span className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-brand-pink">P</span> +971 54 888 6318</p>
+                     <a href="https://wa.me/971548886318" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 hover:text-brand-pink transition-colors cursor-pointer">
+                       <span className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-brand-pink"><MessageSquare size={18} /></span>
+                       <span>WhatsApp: +971 54 888 6318</span>
+                     </a>
                      <p className="flex items-center gap-4"><span className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-brand-pink">L</span> Dubai, United Arab Emirates</p>
                    </div>
                  </div>
@@ -1941,6 +1945,18 @@ const App = () => {
         </main>
 
         <Footer theme={theme} />
+        
+        {/* Floating WhatsApp Button */}
+        <a
+          href="https://wa.me/971548886318"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
+          aria-label="Contact via WhatsApp"
+        >
+          <MessageSquare size={28} className="text-white" />
+          <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full animate-pulse"></span>
+        </a>
       </div>
       </Router>
     </ThemeContext.Provider>
